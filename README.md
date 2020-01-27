@@ -6,7 +6,7 @@ Here are some Bash/Perl scripts which allow to extend youtube-viewer functionali
 3) `gapless_play_pause.sh` - allows the play/pause currently used MPV player instance.
 4) `monitor_gapless_play.sh` - displays in a separate xterm currently played song info.
 
-Dependencies:
+### Dependencies:
 
 These scripts depends on the following items:
 
@@ -22,3 +22,26 @@ use HTTP::Tiny;
 c) MPV player is used for playback
 
 d) Bash and some standard Linux tools.
+
+### Usage
+
+1) Put these scripts somewhere where your PATH can see them. :)
+2) Modify the `youtube-viewer.conf` custom_layout to this:
+
+```
+  custom_layout_format  => [
+                            {width =>  10,    text => "*TIME* \| ", align => 'right'},
+                            {width => 13,    text => "*ID* \| "},
+                            {width => 13,    text => "*PUBLISHED* \| "},
+                            {width => '80%', text => "*TITLE*"},
+                           ],
+
+```
+
+3) Run `discogs_url_to_youtube-viewer_parser.pl <album_version_URL>` to get a file with the album info. In case the file does not have the ID's you need to find them yourself as the maching mechanism might not find the album all the time.
+
+4) Run `gapless_play.sh <album_file.txt>` to play the album music without gaps (it will run two instances of mpv, second paused but caching the next song).
+
+5) You can bind some key combination to `gapless_play_pause.sh` in order to play/pause currently used MPV instance.
+
+6) `monitor_gapless_play.sh` will be opened to display the currently played song info.
