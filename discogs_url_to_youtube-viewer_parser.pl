@@ -31,7 +31,7 @@ use HTTP::Tiny;
 
 # Definition of constants
 use constant DIVIDER     => 60;
-use constant TOLERANCE   => 50;
+use constant TOLERANCE   => 10;
 use constant SEARCH      => 'youtube-viewer --no-colors -noC --no-interactive --custom-layout';
 use constant INTERACTIVE => 'youtube-viewer --resolution=audio --player=mpv_audio';
 use constant PLAY        => 'youtube-viewer --resolution=audio --player=mpv_audio --no-interactive --std-input=1';
@@ -77,6 +77,11 @@ sub parse_html($) {
         $data{$nr}{'artist'} = encode("utf-8", $artist);
         $data{$nr}{'title'}  = $title;
         $data{$nr}{'time'}   = $rec->look_down("class", "tracklist_track_duration")->as_text;
+
+        if ($data{$nr}{'time'} eq '') {
+
+            $data{$nr}{'time'} = "0:00";
+        }
 
         $data{$nr}{'stime'}  = to_sec($data{$nr}{'time'});
     }
@@ -246,7 +251,7 @@ sub print_all_songs(\@\%;$) {
         $fout2=STDOUT;
     }
 
-    for ( my $i = 0; $i < $#$ref_data; $i++ ) {
+    for ( my $i = 0; $i <= $#$ref_data; $i++ ) {
         
         #print_playback_script($ref_data->[$i][0], $ref_data->[$i][1], $ref_data->[$i][2], $ref_web, $fout);
         print_list_file($ref_data->[$i][2], $ref_data->[$i][1], $ref_web, $fout2);
@@ -261,7 +266,7 @@ sub print_all_songs(\@\%;$) {
 sub choose_song(\@$$$) {
 
     my ($data, $artist, $title, $time) = @_;
-    my $str = "=" x 50;
+    my $str = "=" x DIVIDER;
     my $sel = 1;
 
     # print query data
