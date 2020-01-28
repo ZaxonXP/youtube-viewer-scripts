@@ -5,6 +5,7 @@ Here are some Bash/Perl scripts which allow to extend youtube-viewer functionali
 2) `gapless_play.sh` - uses a list of YT ID's to play music without gaps.
 3) `gapless_play_pause.sh` - allows the play/pause currently used MPV player instance.
 4) `monitor_gapless_play.sh` - displays in a separate xterm currently played song info.
+5) `gaples_play_next.sh` - allows the current song to end.
 
 ### Dependencies:
 
@@ -15,9 +16,9 @@ a) `youtube-viewer` script has to be installed https://github.com/trizen/youtube
 b) Perl modules are required for the `discogs_url_to_youtube-viewer_parser.pl` script:
 
 ```
-use HTML::Entities;
-use HTML::TreeBuilder;
-use HTTP::Tiny;
+HTML::Entities;
+HTML::TreeBuilder;
+HTTP::Tiny;
 ```
 c) MPV player is used for playback
 
