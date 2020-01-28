@@ -185,7 +185,7 @@ sub get_songs_list($) {
         my @out =  split(/\|/, $_);
         map { s/^\s+|\s+$| \-//g; } @out;   # trim the spaces and leading dash
 
-        push(@data, { time => to_sec($out[0]), id => $out[1], title => $out[3] });
+        push(@data, { stime => to_sec($out[0]), id => $out[1], title => $out[3] });
     }
 
     return @data;
@@ -263,18 +263,14 @@ sub print_all_songs(\@\%;$) {
 
 ###################################################
 # choose the song manually and return it
-sub choose_song(\@$$$) {
+sub choose_song(\@) {
 
-    my ($data, $artist, $title, $time) = @_;
-    my $str = "=" x DIVIDER;
+    my ($data) = @_;
     my $sel = 1;
-
-    # print query data
-    printf("%s\n%s - %s - %s\n%s\n", $str, $artist, $title, to_time($time), $str);
 
     # print all the data found
     for (my $i = 0; $i <= $#$data; $i++) {
-        printf("%2d. %s - %s\n", $i+1, $data->[$i]{title}, to_time($data->[$i]{time}));
+        printf("%2d. %s - %s\n", $i+1, $data->[$i]{title}, to_time($data->[$i]{stime}));
     }
 
     while(1) {
@@ -285,7 +281,7 @@ sub choose_song(\@$$$) {
     }
     clear;
 
-    return $data->[$sel-1]{id};
+    return $sel-1;
 }
 
 ###################################################
@@ -294,6 +290,7 @@ sub get_songs(\%) {
 
     my $input = shift;
     my @ids;
+    my $divstr = "=" x DIVIDER;
     my $end_id = scalar keys %{$input};
 
     for (my $idx = 1; $idx <= $end_id; $idx++) {
@@ -306,6 +303,9 @@ sub get_songs(\%) {
         my $title  = $input->{$idx}{'title'};
         my $time   = $input->{$idx}{'stime'};
         my $str    = $artist . " " . $title;
+
+        # print query data
+        printf("%s\n%s - %s - %s\n%s\n", $divstr, $artist, $title, to_time($time), $divstr);
 
         my @data = get_songs_list($str);
 
@@ -332,7 +332,7 @@ sub get_songs(\%) {
                 # 2) check if the title is matching
                 if ( index(lc($rtitle), lc($title)) > -1) {
 
-                    my $rtime = $record->{'time'};
+                    my $rtime = $record->{'stime'};
                 
                     # if there is no time in the Discogs and the FIRST env var is used then use the first found
                     if (! defined($time) && defined($ENV{'FIRST'})) {
@@ -352,7 +352,13 @@ sub get_songs(\%) {
             push(@ids, [PLAY, $found_id, $idx]);
 
         } else {
-            push(@ids, [PLAY, choose_song(@data, $artist, $title, $time), $idx]);
+            my $sel = choose_song(@data);
+
+            # update time
+            $input->{$idx}{'stime'} = $data[$sel]{'stime'};
+            $input->{$idx}{'time'}  = to_time($data[$sel]{'stime'});
+
+            push(@ids, [PLAY, $data[$sel]{'id'}, $idx]);
         }
     }
 
