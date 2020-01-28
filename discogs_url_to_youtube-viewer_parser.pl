@@ -85,6 +85,13 @@ sub parse_html($) {
 }
 
 ################################################
+# clear the terminal screen
+sub clear {
+    print "\033[2J";    #clear the screen
+    print "\033[0;0H";  #jump to 0,0
+}
+
+################################################
 # clean the garbage from the string
 sub clean_garbage($) {
     my $str = shift;
@@ -271,6 +278,7 @@ sub choose_song(\@$$$) {
         chomp($sel);
         last if ($sel =~ m/[0-9]{1,2}/);
     }
+    clear;
 
     return $data->[$sel-1]{id};
 }
@@ -281,8 +289,12 @@ sub get_songs(\%) {
 
     my $input = shift;
     my @ids;
+    my $end_id = scalar keys %{$input};
 
-    for (my $idx = 1; $idx <= (scalar keys %{$input}); $idx++) {
+    for (my $idx = 1; $idx <= $end_id; $idx++) {
+
+        clear;
+        printf("Getting info for song: %d / %d\n", $idx, $end_id); 
 
         # get song records from youtube-viewer by title and artist
         my $artist = $input->{$idx}{'artist'};
