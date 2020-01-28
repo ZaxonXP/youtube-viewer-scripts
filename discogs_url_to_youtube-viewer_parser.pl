@@ -31,7 +31,7 @@ use HTTP::Tiny;
 
 # Definition of constants
 use constant DIVIDER     => 60;
-use constant TOLERANCE   => 5;
+use constant TOLERANCE   => 50;
 use constant SEARCH      => 'youtube-viewer --no-colors -noC --no-interactive --custom-layout';
 use constant INTERACTIVE => 'youtube-viewer --resolution=audio --player=mpv_audio';
 use constant PLAY        => 'youtube-viewer --resolution=audio --player=mpv_audio --no-interactive --std-input=1';
@@ -127,6 +127,15 @@ sub quote_dash($) {
     my $str = shift;
     $str =~ s#\-#\\-#g;
     return $str;
+}
+
+################################################
+# convert seconds to mm:ss
+sub to_time($) {
+    
+    my $inp = shift;
+
+    return sprintf("%d:%02d", int($inp / 60), $inp % 60);
 }
 
 ################################################
@@ -241,6 +250,32 @@ sub print_all_songs(\@\%;$) {
 }
 
 ###################################################
+# choose the song manually and return it
+sub choose_song(\@$$$) {
+
+    my ($data, $artist, $title, $time) = @_;
+    my $str = "=" x 50;
+    my $sel = 1;
+
+    # print query data
+    printf("%s\n%s - %s - %s\n%s\n", $str, $artist, $title, to_time($time), $str);
+
+    # print all the data found
+    for (my $i = 0; $i <= $#$data; $i++) {
+        printf("%2d. %s - %s\n", $i+1, $data->[$i]{title}, to_time($data->[$i]{time}));
+    }
+
+    while(1) {
+        printf("Choose: ");
+        $sel = <STDIN>;
+        chomp($sel);
+        last if ($sel =~ m/[0-9]{1,2}/);
+    }
+
+    return $data->[$sel-1]{id};
+}
+
+###################################################
 # get the list of songs using youtube-viewer
 sub get_songs(\%) {
 
@@ -300,7 +335,7 @@ sub get_songs(\%) {
             push(@ids, [PLAY, $found_id, $idx]);
 
         } else {
-            push(@ids, [INTERACTIVE, $str, $idx]);
+            push(@ids, [PLAY, choose_song(@data, $artist, $title, $time), $idx]);
         }
     }
 
