@@ -54,7 +54,7 @@ sub get_html($) {
 # parse html and return the data hash
 sub parse_html($) {
     my $html = shift;
-    my %data;
+    my (%data, $idx);
 
     my $tree = HTML::TreeBuilder->new_from_content($html);
 
@@ -65,7 +65,7 @@ sub parse_html($) {
 
     foreach my $rec (@records) {
             
-        my $nr     = $rec->look_down("class", "tracklist_track_pos")->as_text;
+        my $nr     = $rec->look_down("class", "tracklist_track_pos") ? $rec->look_down("class", "tracklist_track_pos")->as_text : ++$idx;
         my $artist = $rec->look_down("class", "tracklist_track_artists") ? $rec->look_down("class", "tracklist_track_artists")->as_text : $tree->look_down("id", "profile_title")->look_down("_tag", "a")->as_text;
         my $title  = $rec->look_down("class", "tracklist_track_title")->as_text;
 
