@@ -1,0 +1,14 @@
+unmap <F7>
+unmap <F8>
+unmap <F9>
+unmap <F4>
+
+nmap <F4> ^EEE:execute ':!clear && youtube-viewer -C --use-colors -A --player=mpv -7 https://www.youtube.com/watch?v=' . shellescape(expand('<cWORD>'))<cr>
+nmap <F5> ^EEE:execute ':!clear && youtube-viewer -C --use-colors -A --player=mpv_audio --resolution=audio https://www.youtube.com/watch?v=' . shellescape(expand('<cWORD>'))<cr>
+nmap <F6> ^EEE:execute ':!/home/user/Videos/mps/.scripts/video_play.pl %'<cr>
+nmap <F7> ^EEE:execute ':!/home/user/Videos/mps/.scripts/audio_play.pl %'<cr>
+nmap <F8> ^EEE:execute ':!clear && youtube-viewer -C --use-colors -A -7 -d https://www.youtube.com/watch?v=' . shellescape(expand('<cWORD>'))<cr>
+nmap <F9>  ^EEE:execute ':!/home/user/Videos/mps/.scripts/audio_get.pl %'<cr>
+nmap <F11> ^EEE:execute ':!/home/user/Videos/mps/.scripts/video_get.pl %'<cr>
+nmap <F10> ^EEE:execute ':!clear && youtube-viewer -C --use-colors --results=5 --comments https://www.youtube.com/watch?v=' . shellescape(expand('<cWORD>'))<cr>
+nmap <F3> ZZ:cq<cr>

@@ -1,0 +1,1 @@
+F4:Play the line (video)| F5:Play the line (audio)| F6:Play many (video)| F7:Play many (audio)| dd:delete the line| F2:save the file| F10:comments| F8:download (video)| F9:download (audio, many)| F11:download (video,many)| F3:exit
