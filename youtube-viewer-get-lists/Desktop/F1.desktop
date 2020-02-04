@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=F1
+Comment=
+Exec=/home/user/Videos/mps/.scripts/show_list.sh /home/user/Videos/mps/F1.txt
+Icon=/home/user/.icons/F1.png
+Path=/home/user/Videos/mps/
+Terminal=false
+StartupNotify=false
