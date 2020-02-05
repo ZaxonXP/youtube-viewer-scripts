@@ -17,7 +17,7 @@ if [[ "$monitor" != "" ]]; then
     sleep 1
 fi
 
-xterm -n "GAPLESS_PLAY" -T "GAPLESS_PLAY" -geometry 119x5+0+2 -e bash $HOME/Batch/monitor_gapless_play.sh $1 &
+xterm -n "GAPLESS_PLAY" -T "GAPLESS_PLAY" -geometry 119x6+0+2 -e bash $HOME/Batch/monitor_gapless_play.sh "$1" &
 
 touch $soc1 $soc2
 #---------------------------------------
@@ -41,13 +41,10 @@ get_soc() {
 #---------------------------------------
 i=0
 
-cat $1 | while IFS=\| read -r f1 f2 f3 f4
+cat "$1" | while IFS=\| read -r f1 f2 f3 f4
 do
-    duration=$f1
     id=${f2% }
     id=${id# }
-    artist=$f3
-    title=$f4
 
     socket=$( get_soc $i $soc1 $soc2 )
     pause=$( get_pause $i )

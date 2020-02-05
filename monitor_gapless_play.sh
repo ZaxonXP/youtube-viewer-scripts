@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Shows currently played song when used with gapless_play.sh
-source=$1
+source="$1"
 tracks=$(wc -l "$source" | cut -d" " -f1)
 
 clear
@@ -20,10 +20,10 @@ while [ 1 ]; do
         if [[ "$first" == "-" ]]; then
 
             info=$(grep \\$yt_id "$source")
-            track=$(grep -n \\$yt_id $source | cut -d: -f1)
+            track=$(grep -n \\$yt_id "$source" | cut -d: -f1)
         else
             info=$(grep $yt_id "$source")
-            track=$(grep -n $yt_id $source | cut -d: -f1)
+            track=$(grep -n $yt_id "$source" | cut -d: -f1)
         fi
 
         if [ -v DEBUG ]; then
@@ -36,6 +36,7 @@ while [ 1 ]; do
         echo "Title  : $(echo $info | cut -d\| -f4)"
         echo "Time   :  $(echo $info | cut -d\| -f1)"
         echo "Track  :  $track / $tracks"
+        echo "YT ID  : $(echo $info | cut -d\| -f2)"
 
         # wait until the process exit to iterate
         tail --pid=$mpv_id -f /dev/null
