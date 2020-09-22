@@ -46,3 +46,6 @@ d) Bash and some standard Linux tools.
 5) You can bind some key combination to `gapless_play_pause.sh` in order to play/pause currently used MPV instance.
 
 6) `monitor_gapless_play.sh` will be opened to display the currently played song info.
+
+7) You can use the `gp.sh` script to run the playback with 3 windows (log, current song details, vim playlist with the cursor tracking current song):
+
