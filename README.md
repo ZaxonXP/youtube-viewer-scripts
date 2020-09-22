@@ -49,3 +49,4 @@ d) Bash and some standard Linux tools.
 
 7) You can use the `gp.sh` script to run the playback with 3 windows (log, current song details, vim playlist with the cursor tracking current song):
 
+![screenshot](https://github.com/ZaxonXP/youtube-viewer-scripts/blob/master/screenshot.png)
