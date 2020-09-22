@@ -17,9 +17,19 @@ if [[ "$monitor" != "" ]]; then
     sleep 1
 fi
 
-xterm -n "GAPLESS_PLAY" -T "GAPLESS_PLAY" -geometry 119x6+0+2 -e bash $HOME/Batch/monitor_gapless_play.sh "$1" &
+xterm -n "GAPLESS_PLAY" -T "GAPLESS_PLAY" -geometry 119x7-0+0 -e bash $HOME/Batch/monitor_gapless_play.sh "$1" &
 
 touch $soc1 $soc2
+#---------------------------------------
+prefix_echo () {
+  if [[ "$(($1 % 2))" == "0" ]]; then
+      color=green
+  else
+      color=cyan
+  fi
+  perl -sne 'use Term::ANSIColor;$|=1; print colored("[$pre]\t$_", $col)' -- -col="$color" -pre="$2"
+}
+
 #---------------------------------------
 get_pause() {
     if [[ $1 == 0 ]]; then
@@ -49,7 +59,7 @@ do
     socket=$( get_soc $i $soc1 $soc2 )
     pause=$( get_pause $i )
 
-    mpv --input-ipc-server="$socket" --no-video $pause "https://www.youtube.com/watch?v=$id" & 
+    mpv --term-playing-msg="ID:${id}" --input-ipc-server="$socket" --no-video $pause "https://www.youtube.com/watch?v=$id" | prefix_echo $i "$id" & 
     pids[$i]=$!
 
     if [[ $i > 0 ]]; then
