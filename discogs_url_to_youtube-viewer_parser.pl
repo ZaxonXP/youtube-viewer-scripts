@@ -63,6 +63,10 @@ sub parse_html($) {
     my @records = $tracklist->look_down("class", "first tracklist_track track");
     @records    = (@records, $tracklist->look_down("class", " tracklist_track track"));
 
+    #use Data::Dumper;
+    #print Dumper(@records);
+    #exit 1;
+
     foreach my $rec (@records) {
             
         my $nr     = $rec->look_down("class", "tracklist_track_pos") ? $rec->look_down("class", "tracklist_track_pos")->as_text : ++$idx;
@@ -73,6 +77,9 @@ sub parse_html($) {
 
         # remove some garbage
         $artist = clean_garbage($artist);
+
+        # debug info
+        #printf("NR = '%s'\nARTIST = '%s'\nTITLE = '%s'\n", $nr, $artist, $title);<STDIN>;
 
         $data{$nr}{'artist'} = encode("utf-8", $artist);
         $data{$nr}{'title'}  = $title;
@@ -115,19 +122,24 @@ sub fix_nr($) {
 
     my $nr = shift;
 
-    if ($nr =~ /(\d+)\.(\d+)/) {
+    if ($nr =~ /^(\d+)\.(\d+)$/) {
 
         $nr = $1 + $2 - 1;
     }
 
-    if ($nr =~ /\d+(\w+)/) {
+    if ($nr =~ /^\d+(\w+)$/) {
 
         my $char = lc($1);
-        my $idx = index('ABCDEFGHIJKLMNOPQRSTUVWXYZ', uc($char));
+        my $idx2 = index('ABCDEFGHIJKLMNOPQRSTUVWXYZ', uc($char));
 
-        if ($idx > -1) {
-            $nr += $idx + 1;
+        if ($idx2 > -1) {
+            $nr += $idx2 + 1;
         }
+    }
+
+    if ($nr =~ /^([a-zA-Z]+)(\d+)$/) {
+
+        $nr = $2;
     }
 
     return $nr;
