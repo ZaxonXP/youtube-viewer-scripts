@@ -14,6 +14,9 @@ main=$((xdotool search --class xterm ; xdotool search --name $name) | sort | uni
 wid=$((xdotool search --class Gvim ; xdotool search --name $name) | sort | uniq -d)
 
 xdotool windowmove $wid 960 120
-wmctrl -ir $main -b remove,maximized_vert,maximized_horz
-xdotool windowsize $main 958 1056
+# resize terminal window when run from the "show_list.sh" script
+if [ "$main" != "" ]; then
+    wmctrl -ir $main -b remove,maximized_vert,maximized_horz
+    xdotool windowsize $main 958 1056
+fi
 gapless_play.sh $1
