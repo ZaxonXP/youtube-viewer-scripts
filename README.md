@@ -7,6 +7,8 @@ Here are some Bash/Perl scripts which allow to extend youtube-viewer functionali
 4) `monitor_gapless_play.sh` - displays in a separate xterm currently played song info.
 5) `gaples_play_next.sh` - allows the current song to end.
 
+The folder `gp2` contains updated version which does not use `youtube-dl` script for caching the songs.
+
 ### Dependencies:
 
 These scripts depends on the following items:
