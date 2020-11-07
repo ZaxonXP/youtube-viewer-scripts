@@ -56,21 +56,33 @@ cache_id() {
     local dir=$1
     local id=$2
 
+    local i=30
+
     echo -ne "Caching '$id'"
     
     youtube-viewer -q --no-wget-dl --no-ytdl -noI -A -d --resolution=audio --downloads-dir=$dir --filename=*ID* "https://www.youtube.com/watch?v=$id" 2>&1 > /dev/null &
 
     # wait for the file to get cached
+    file=$dir/$id
     while true
     do
-        if [ -f $dir/$id ]; then
+        if [ -f $file ]; then
             echo "done"
             break
         fi
         echo -ne "."
         sleep 1
-    done
 
+        if [[ $i > 0 ]]; then
+            i=$(( $i - 1 ))
+        else
+            if [[ ! -f $file && ! -f "$file.part" ]]; then
+                echo "File '$file.part' is not cached!"
+                exit 1;
+            fi
+        fi
+
+    done
 }
 
 #---------------------------------------
